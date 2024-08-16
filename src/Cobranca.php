@@ -1,6 +1,6 @@
 <?php
 
-namespace Verseles\BB;
+namespace insign\BB;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;

@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Verseles\\BB\\": "src/"
+            "insign\\BB\\": "src/"
         }
     },
     "minimum-stability": "stable",
