@@ -1,0 +1,26 @@
+{
+    "name": "verseles/integracao-bb",
+    "description": "Biblioteca para facilitar a integração com a API de cobranças do Banco do Brasil",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hélio Oliveira",
+            "email": "integracao-bb@helio.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Verseles\\BB\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.3",
+        "guzzlehttp/guzzle": "^7",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "psy/psysh": "@stable"
+    }
+}
