@@ -17,10 +17,10 @@ class Cobranca
     protected bool $production = false
   )
   {
-    $this->httpClient = new Client([
+    $this->setHttpClient(new Client([
       'base_uri' => $this->getUrlApi(),
       'verify'   => $this->isProduction(),
-    ]);
+    ]));
 
   }
 
@@ -46,7 +46,7 @@ class Cobranca
       'scope'      => "cobrancas.boletos-info cobrancas.boletos-requisicao",
     ];
 
-    $response = $this->httpClient->post(
+    $response = $this->getHttpClient()->post(
       $this->getUrlToken(),
       [
         'headers'     => $headers,
@@ -59,7 +59,7 @@ class Cobranca
 
   public function registrarBoleto(array $campos): stdClass
   {
-    $response = $this->httpClient->post(
+    $response = $this->getHttpClient()->post(
       uri    : "cobrancas/v2/boletos",
       options: [
         "headers" => $this->getAuthHeaders(),
@@ -72,7 +72,7 @@ class Cobranca
 
   public function alterarBoleto($id, array $campos): stdClass
   {
-    $response = $this->httpClient->patch(
+    $response = $this->getHttpClient()->patch(
       "cobrancas/v2/boletos/{$id}",
       [
         "headers" => $this->getAuthHeaders(),
@@ -83,10 +83,10 @@ class Cobranca
     return $this->processAnswer($response);
   }
 
-  public function verBoleto(int|string $id, int|string $campos): stdClass
+  public function verBoleto(int|string $id, int|string $convenio): stdClass
   {
-    $response = $this->httpClient->get(
-      "cobrancas/v2/boletos/{$id}?numeroConvenio={$campos}",
+    $response = $this->getHttpClient()->get(
+      "cobrancas/v2/boletos/{$id}?numeroConvenio={$convenio}",
       [
         "headers" => $this->getAuthHeaders(),
       ]
@@ -97,7 +97,7 @@ class Cobranca
 
   public function baixarBoleto(int|string $id, int|string $convenio): stdClass
   {
-    $response = $this->httpClient->post(
+    $response = $this->getHttpClient()->post(
       "cobrancas/v2/boletos/{$id}/baixar",
       [
         "headers" => $this->getAuthHeaders(),
@@ -135,6 +135,16 @@ class Cobranca
   public function processAnswer(ResponseInterface $response): stdClass
   {
     return json_decode($response->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
+  }
+
+  public function getHttpClient(): Client
+  {
+    return $this->httpClient;
+  }
+
+  public function setHttpClient(Client $httpClient): void
+  {
+    $this->httpClient = $httpClient;
   }
 
 }

@@ -1,5 +1,5 @@
 {
-    "name": "verseles/integracao-bb",
+    "name": "insign/integracao-bb",
     "description": "Biblioteca para facilitar a integração com a API de cobranças do Banco do Brasil",
     "type": "library",
     "license": "MIT",
@@ -21,6 +21,12 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "psy/psysh": "@stable"
+        "psy/psysh": "@stable",
+        "pestphp/pest": "^2.35"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }

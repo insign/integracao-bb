@@ -3,7 +3,7 @@
 ## Instanciar a classe
 
 ```php
-use Verseles\BB\Cobranca;
+use insign\BB\Cobranca;
 
 $cobranca = new Cobranca('clientId', 'clientSecret', 'developerKey', production: false);
 ```
@@ -19,75 +19,62 @@ $token = $cobranca->getTokenAccess();
 ## Registrar Boleto
 
 ```php
-$registro = [
-    'numeroConvenio' => '',
-    'numeroCarteira' => '17',
-    'numeroVariacaoCarteira' => '35',
-    'codigoModalidade' => '01', //Identifica a característica dos boletos dentro das modalidades de cobrança existentes no banco. Domínio: 01 - SIMPLES; 04 - VINCULADA
-    'dataEmissao' => '30.03.2021', //Data de emissão do boleto (formato "dd.mm.aaaaa").
-    'dataVencimento' => '31.03.2021', //Data de vencimento do boleto (formato "dd.mm.aaaaa").
-    'valorOriginal' => '10', //Valor de cobrança > 0.00, emitido em Real (formato decimal separado por "."). Valor do boleto no registro. Deve ser maior que a soma dos campos “VALOR DO DESCONTO DO TÍTULO” e “VALOR DO ABATIMENTO DO TÍTULO”, se informados. Informação não passível de alteração após a criação. No caso de emissão com valor equivocado, sugerimos cancelar e emitir novo boleto.
-    'valorAbatimento' => '0',
-    'quantidadeDiasProtesto' => '',
-    'quantidadeDiasNegativacao' => '',
-    'orgaoNegativador' => '',
-    'indicadorAceiteTituloVencido' => 'S',
-    'numeroDiasLimiteRecebimento' => '90',
-    'codigoAceite' => 'A',
-    'codigoTipoTitulo' => '2',
-    'descricaoTipoTitulo' => 'DUPLICATA MERCANTIL',
-    'indicadorPermissaoRecebimentoParcial' => 'N',
-    'numeroTituloBeneficiario' => '1',
-    'campoUtilizacaoBeneficiario' => 'UM TEXTO',
-    'numeroTituloCliente' => 'nossonumero',
-    'mensagemBloquetoOcorrencia' => '',
-    'desconto' => [
-        'tipo' => '',
-        'dataExpiracao' => '',
-        'porcentagem' => '',
-        'valor' => '',
-    ],
-    'segundoDesconto' => [
-        'dataExpiracao' => '',
-        'porcentagem' => '',
-        'valor' => '',
-    ],
-    'terceiroDesconto' => [
-        'dataExpiracao' => '',
-        'porcentagem' => '',
-        'valor' => '',
-    ],
-    'jurosMora' => [
-        'tipo' => '',
-        'porcentagem' => '',
-        'valor' => '',
-    ],
-    'multa' => [
-        'tipo' => '',
-        'data' => '',
-        'porcentagem' => '',
-        'valor' => '',
-    ],
-    'pagador' => [
-        'tipoInscricao' => '1',
-        'numeroInscricao' => '',
-        'nome' => '',
-        'endereco' => '',
-        'cep' => '',
-        'cidade' => '',
-        'bairro' => '',
-        'uf' => '',
-        'telefone' => '',
-    ],
-    'beneficiarioFinal' => [
-        'tipoInscricao' => '1',
-        'numeroInscricao' => '',
-        'nome' => '',
-    ],    
-    'indicadorPix' => 'S'
-]
+// https://apoio.developers.bb.com.br/referency/post/5f4fb7f5b71fb5001268ca44
+$convenio = '3128557';
+$idBoleto = '000' . $convenio . random_int(1000000000, 9999999999);
 
-$registrar = $cobranca->registrarBoleto($registro);
+$registro = [
+  'numeroConvenio'                       => $convenio,
+  'numeroCarteira'                       => '17',
+  'numeroVariacaoCarteira'               => '35',
+  'codigoModalidade'                     => '1',
+  'dataEmissao'                          => date('d.m.Y'),
+  'dataVencimento'                       => '31.12.' . date('Y'),
+  'valorOriginal'                        => '128.40',
+  'indicadorAceiteTituloVencido'         => 'N',
+  'codigoAceite'                         => 'A',
+  'codigoTipoTitulo'                     => '2',
+  'descricaoTipoTitulo'                  => 'DUPLICATA MERCANTIL',
+  'indicadorPermissaoRecebimentoParcial' => 'N',
+  'numeroTituloBeneficiario'             => '1',
+  'campoUtilizacaoBeneficiario'          => 'UM TEXTO',
+  'numeroTituloCliente'                  => $idBoleto,
+  'mensagemBloquetoOcorrencia'           => '',
+  'pagador'                              => [
+    'tipoInscricao'   => '1',
+    'numeroInscricao' => '97965940132',
+    'nome'            => 'Teste Teste',
+    'endereco'        => 'R. Teste',
+    'cep'             => '10110000',
+    'cidade'          => 'São Paulo',
+    'bairro'          => 'Centro',
+    'uf'              => 'SP',
+    'telefone'        => '1112345678',
+  ],
+  //    'beneficiarioFinal' => [
+  //        'tipoInscricao' => '1',
+  //        'numeroInscricao' => '',
+  //        'nome' => '',
+  //    ],
+  'indicadorPix'                         => 'S',
+];
+try {
+  $boletoRegistrado = $cobranca->registrarBoleto($registro);
+}
+catch (\Exception $e) {
+  echo "\nErro ao registrar o boleto: {$e->getMessage()}\n";
+  echo json_encode($registro);
+  return;
+}
+
+if ($idBoleto == $boletoRegistrado->numero) {
+  echo "\nBoleto registrado com sucesso\n";
+  echo json_encode($boletoRegistrado);
+} else {
+  echo "\nErro ao registrar o boleto";
+  echo json_encode($boletoRegistrado);
+  return;
+}
 ```
 
 ## Consultar Boleto
