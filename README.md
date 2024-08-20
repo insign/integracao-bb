@@ -1,4 +1,5 @@
 # Integração com a API de Cobranças do Banco do Brasil
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/insign/integracao-bb/test.yml?style=for-the-badge&label=TEST)
 
 ## Instalação
 
