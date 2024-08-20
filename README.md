@@ -1,5 +1,11 @@
 # Integração com a API de Cobranças do Banco do Brasil
 
+## Instalação
+
+```bash
+composer require insign/integracao-bb
+```
+
 ## Instanciar a classe
 
 ```php
