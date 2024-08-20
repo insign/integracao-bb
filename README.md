@@ -199,4 +199,12 @@ $baixar = $cobranca->baixarBoleto($id_boleto, $convenio);
 
 Informações sobre a API utilizada nesta integração: https://apoio.developers.bb.com.br/referency/post/5f9c2149f39b8500120ab13c
 
+## Contribuições
+
+Contribua com esta integração no [GitHub](https://github.com/insign/integracao-bb)
+
+## Testes
+Execute os testes com [Pest](https://pestphp.com/) executando: `make test`
+
 ## Licença
+[GNU Affero General Public License v3.0](LICENSE)
