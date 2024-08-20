@@ -9,6 +9,9 @@
             "email": "integracao-bb@helio.me"
         }
     ],
+    "scripts": {
+        "test": "vendor/bin/pest"
+    },
     "autoload": {
         "psr-4": {
             "insign\\BB\\": "src/"

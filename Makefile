@@ -3,7 +3,7 @@
 
 .PHONY: test publish
 test:
-	./vendor/bin/pest
+	composer test
 
 publish:
 	git push --follow-tags
