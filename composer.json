@@ -2,7 +2,7 @@
     "name": "insign/integracao-bb",
     "description": "Biblioteca para facilitar a integração com a API de cobranças do Banco do Brasil",
     "type": "library",
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "authors": [
         {
             "name": "Hélio Oliveira",
