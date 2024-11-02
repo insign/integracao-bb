@@ -2,9 +2,9 @@
 
 namespace insign\BB;
 
+use stdClass;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
 
 class Cobranca
 {
@@ -14,24 +14,24 @@ class Cobranca
     private string $clientID,
     private string $clientSecret,
     private string $developerKey,
-    protected bool $production = false
+    protected bool $production = FALSE
   )
   {
     $this->setHttpClient(new Client([
-      'base_uri' => $this->getUrlApi(),
-      'verify'   => $this->isProduction(),
-    ]));
+                                      'base_uri' => $this->getUrlApi(),
+                                      'verify'   => $this->isProduction(),
+                                    ]));
 
   }
 
   public function getUrlToken(): string
   {
-    return "https://oauth." . ($this->isProduction() ?: 'sandbox.') . "bb.com.br/oauth/token";
+    return "https://oauth." . ($this->isProduction() ? '' : 'sandbox.') . "bb.com.br/oauth/token";
   }
 
   public function getUrlApi(): string
   {
-    return "https://api." . ($this->isProduction() ?: 'sandbox.') . "bb.com.br/";
+    return "https://api." . ($this->isProduction() ? '' : 'sandbox.') . "bb.com.br/";
   }
 
   public function getTokenAccess()
@@ -62,9 +62,9 @@ class Cobranca
     $response = $this->getHttpClient()->post(
       uri    : "cobrancas/v2/boletos",
       options: [
-        "headers" => $this->getAuthHeaders(),
-        "json"    => $campos,
-      ]
+                 "headers" => $this->getAuthHeaders(),
+                 "json"    => $campos,
+               ]
     );
 
     return $this->processAnswer($response);
@@ -134,7 +134,7 @@ class Cobranca
 
   public function processAnswer(ResponseInterface $response): stdClass
   {
-    return json_decode($response->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
+    return json_decode($response->getBody()->getContents(), FALSE, 512, JSON_THROW_ON_ERROR);
   }
 
   public function getHttpClient(): Client
