@@ -8,8 +8,16 @@ test:
 
 # Faz git push e envia a nova tag
 push:
-	@git tag $(NEXT_PATCH_VERSION)
-	@echo "Nova tag criada: $(NEXT_PATCH_VERSION)"
-	@git push origin $(NEXT_PATCH_VERSION)
-	@echo "Tag $(NEXT_PATCH_VERSION) enviada ao repositório remoto."
-.PHONY: test tag push
+	@echo "Você está prestes a criar e enviar a tag $(NEXT_PATCH_VERSION). Continuar? [y/N]"
+	@read -r response; \
+	if [ "$$response" = "y" ] || [ "$$response" = "Y" ]; then \
+		git push; \
+		git tag $(NEXT_PATCH_VERSION); \
+		echo "Nova tag criada: $(NEXT_PATCH_VERSION)"; \
+		git push origin $(NEXT_PATCH_VERSION); \
+		echo "Tag $(NEXT_PATCH_VERSION) enviada ao repositório remoto."; \
+	else \
+		echo "Operação cancelada."; \
+	fi
+
+.PHONY: test push
