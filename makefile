@@ -12,9 +12,9 @@ push:
 	@read -r response; \
 	if [ "$$response" = "y" ] || [ "$$response" = "Y" ]; then \
 		git push; \
-		git tag $(NEXT_PATCH_VERSION); \
+		git tag -a $(NEXT_PATCH_VERSION) -m "$(NEXT_PATCH_VERSION)"; \
 		echo "Nova tag criada: $(NEXT_PATCH_VERSION)"; \
-		git push origin $(NEXT_PATCH_VERSION); \
+		git push --follow-tags; \
 		echo "Tag $(NEXT_PATCH_VERSION) enviada ao repositório remoto."; \
 	else \
 		echo "Operação cancelada."; \

@@ -210,6 +210,8 @@ Informações sobre a API utilizada nesta integração: https://apoio.developers
 
 Contribua com esta integração no [GitHub](https://github.com/insign/integracao-bb)
 
+Para enviar uma nova versão execute `make push` (nova tag patch com seus commits)
+
 ## Testes
 Execute os testes com [Pest](https://pestphp.com/) executando: `make test`
 
