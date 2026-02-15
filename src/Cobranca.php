@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 class Cobranca
 {
   protected Client $httpClient;
+  protected ?stdClass $token = null;
+  protected ?int $tokenExpiresAt = null;
 
   public function __construct(
     private string $clientID,
@@ -34,8 +36,12 @@ class Cobranca
     return "https://api." . ($this->isProduction() ? '' : 'sandbox.') . "bb.com.br/";
   }
 
-  public function getTokenAccess()
+  public function getTokenAccess(bool $forceRefresh = false)
   {
+    if (!$forceRefresh && $this->token && $this->tokenExpiresAt && $this->tokenExpiresAt > time()) {
+      return $this->token;
+    }
+
     $headers = [
       "Content-Type"  => "application/x-www-form-urlencoded",
       "Authorization" => "Basic " . $this->getBasicHash(),
@@ -54,7 +60,15 @@ class Cobranca
       ]
     );
 
-    return json_decode($response->getBody()->getContents());
+    $this->token = json_decode($response->getBody()->getContents());
+
+    if (isset($this->token->expires_in)) {
+      $this->tokenExpiresAt = time() + $this->token->expires_in - 60;
+    } else {
+      $this->tokenExpiresAt = time() + 600;
+    }
+
+    return $this->token;
   }
 
   public function registrarBoleto(array $campos): stdClass
