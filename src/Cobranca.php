@@ -121,6 +121,15 @@ class Cobranca
   public function setProduction(bool $production): void
   {
     $this->production = $production;
+    $this->token = null;
+    $this->tokenExpiresAt = 0;
+
+    if (isset($this->httpClient)) {
+      $config = $this->httpClient->getConfig();
+      $config['base_uri'] = $this->getUrlApi();
+      $config['verify']   = $this->isProduction();
+      $this->setHttpClient(new Client($config));
+    }
   }
 
   public function isProduction(): bool
