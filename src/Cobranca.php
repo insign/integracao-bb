@@ -61,7 +61,7 @@ class Cobranca
       ]
     );
 
-    $this->token = json_decode($response->getBody()->getContents());
+    $this->token = $this->processAnswer($response);
     $this->tokenExpiresAt = time() + ($this->token->expires_in ?? 3600) - 60;
 
     return $this->token;
@@ -115,7 +115,7 @@ class Cobranca
       ]
     );
 
-    return json_decode($response->getBody()->getContents());
+    return $this->processAnswer($response);
   }
 
   public function setProduction(bool $production): void
