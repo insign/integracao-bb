@@ -70,10 +70,11 @@ class Cobranca
   public function registrarBoleto(array $campos): stdClass
   {
     $response = $this->getHttpClient()->post(
-      uri    : "cobrancas/v2/boletos?gw-dev-app-key={$this->developerKey}",
+      uri    : "cobrancas/v2/boletos",
       options: [
                  "headers" => $this->getAuthHeaders(),
                  "json"    => $campos,
+                 "query"   => ["gw-dev-app-key" => $this->developerKey],
                ]
     );
 
@@ -83,10 +84,11 @@ class Cobranca
   public function alterarBoleto($id, array $campos): stdClass
   {
     $response = $this->getHttpClient()->patch(
-      "cobrancas/v2/boletos/{$id}?gw-dev-app-key={$this->developerKey}",
+      "cobrancas/v2/boletos/{$id}",
       [
         "headers" => $this->getAuthHeaders(),
         "json"    => $campos,
+        "query"   => ["gw-dev-app-key" => $this->developerKey],
       ]
     );
 
@@ -96,9 +98,13 @@ class Cobranca
   public function verBoleto(int|string $id, int|string $convenio): stdClass
   {
     $response = $this->getHttpClient()->get(
-      "cobrancas/v2/boletos/{$id}?gw-dev-app-key={$this->developerKey}&numeroConvenio={$convenio}",
+      "cobrancas/v2/boletos/{$id}",
       [
         "headers" => $this->getAuthHeaders(),
+        "query"   => [
+          "gw-dev-app-key" => $this->developerKey,
+          "numeroConvenio"  => $convenio,
+        ],
       ]
     );
 
@@ -108,10 +114,11 @@ class Cobranca
   public function baixarBoleto(int|string $id, int|string $convenio): stdClass
   {
     $response = $this->getHttpClient()->post(
-      "cobrancas/v2/boletos/{$id}/baixar?gw-dev-app-key={$this->developerKey}",
+      "cobrancas/v2/boletos/{$id}/baixar",
       [
         "headers" => $this->getAuthHeaders(),
         "json"    => ["numeroConvenio" => $convenio],
+        "query"   => ["gw-dev-app-key" => $this->developerKey],
       ]
     );
 

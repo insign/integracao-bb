@@ -60,3 +60,32 @@ test('lança exceção JSON em baixarBoleto com resposta não JSON', function ()
 
     expect(fn() => $this->cobranca->baixarBoleto(123, 456))->toThrow(JsonException::class);
 });
+
+test('verifica se parâmetros de query string são codificados corretamente em verBoleto', function () {
+    $container = [];
+    $history = \GuzzleHttp\Middleware::history($container);
+
+    $mock = new MockHandler([
+        new Response(200, [], json_encode(['access_token' => 'token', 'expires_in' => 3600])),
+        new Response(200, [], json_encode(['status' => 'ok'])),
+    ]);
+
+    $handlerStack = HandlerStack::create($mock);
+    $handlerStack->push($history);
+
+    $client = new Client(['handler' => $handlerStack]);
+
+    // Configura a Cobranca com uma developerKey contendo caracteres especiais
+    $cobranca = new Cobranca('clientId', 'clientSecret', 'key&123=456+789');
+    $cobranca->setHttpClient($client);
+
+    // Chama o método verBoleto passando um convênio com caracteres especiais
+    $cobranca->verBoleto(123, 'convenio&123');
+
+    $request = $container[1]['request'];
+    $query = $request->getUri()->getQuery();
+
+    // Verifica se os parâmetros foram encodados corretamente de acordo com a RFC 3986
+    expect($query)->toContain('gw-dev-app-key=key%26123%3D456%2B789');
+    expect($query)->toContain('numeroConvenio=convenio%26123');
+});
