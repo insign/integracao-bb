@@ -21,7 +21,6 @@ class Cobranca
   {
     $this->setHttpClient(new Client([
                                       'base_uri' => $this->getUrlApi(),
-                                      'verify'   => $this->isProduction(),
                                     ]));
 
   }
@@ -134,7 +133,6 @@ class Cobranca
     if (isset($this->httpClient)) {
       $config = $this->httpClient->getConfig();
       $config['base_uri'] = $this->getUrlApi();
-      $config['verify']   = $this->isProduction();
       $this->setHttpClient(new Client($config));
     }
   }
